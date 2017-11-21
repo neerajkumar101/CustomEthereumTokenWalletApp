@@ -1,0 +1,87 @@
+{
+  "contract_name": "Testable",
+  "abi": [
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "currTime",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "weiPerEth",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "t",
+          "type": "uint256"
+        }
+      ],
+      "name": "setFakeTime",
+      "outputs": [],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "testing",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "m",
+          "type": "uint256"
+        }
+      ],
+      "name": "addMinutes",
+      "outputs": [],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "d",
+          "type": "uint256"
+        }
+      ],
+      "name": "addDays",
+      "outputs": [],
+      "payable": false,
+      "type": "function"
+    }
+  ],
+  "unlinked_binary": "0x6060604052341561000f57600080fd5b5b61020e8061001f6000396000f300606060405236156100755763ffffffff7c01000000000000000000000000000000000000000000000000000000006000350416631a6af7b7811461007a5780636c530ee31461009f5780637a08339d146100c45780638d03b102146100dc5780638ff591b414610103578063dabd5d651461011b575b600080fd5b341561008557600080fd5b61008d610133565b60405190815260200160405180910390f35b34156100aa57600080fd5b61008d610151565b60405190815260200160405180910390f35b34156100cf57600080fd5b6100da60043561017a565b005b34156100e757600080fd5b6100ef610195565b604051901515815260200160405180910390f35b341561010e57600080fd5b6100da60043561019e565b005b341561012657600080fd5b6100da6004356101bf565b005b60015460009060ff161561014a575060005461014d565b50425b5b90565b60015460009060ff1615610167575060c861014d565b50670de0b6b3a764000061014d565b5b90565b60015460ff16151561018b57600080fd5b60008190555b5b50565b60015460ff1681565b60015460ff1615156101af57600080fd5b60008054603c83020190555b5b50565b60015460ff1615156101d057600080fd5b600080546201518083020190555b5b505600a165627a7a723058203a62512d65ffe0306a1390eaae798d125521a3befba62ef91d026a0b799c61af0029",
+  "networks": {},
+  "schema_version": "0.0.5",
+  "updated_at": 1509693711159
+}

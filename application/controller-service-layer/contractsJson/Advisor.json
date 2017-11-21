@@ -1,0 +1,46 @@
+{
+  "contract_name": "Advisor",
+  "abi": [
+    {
+      "constant": false,
+      "inputs": [],
+      "name": "claim",
+      "outputs": [],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [],
+      "name": "deposit",
+      "outputs": [],
+      "payable": true,
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "name": "_ico",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "type": "constructor"
+    },
+    {
+      "payable": true,
+      "type": "fallback"
+    }
+  ],
+  "unlinked_binary": "0x6060604052341561000f57600080fd5b604051602080610199833981016040528080519150505b60008054600160a060020a031916600160a060020a0383161790555b505b610146806100536000396000f300606060405236156100305763ffffffff60e060020a6000350416634e71d92d8114610034578063d0e30db014610049575b5b5b005b341561003f57600080fd5b610030610053565b005b6100306100b6565b005b60005473ffffffffffffffffffffffffffffffffffffffff16634e71d92d6040518163ffffffff1660e060020a028152600401600060405180830381600087803b151561009f57600080fd5b6102c65a03f115156100b057600080fd5b5050505b565b60005473ffffffffffffffffffffffffffffffffffffffff1663d0e30db0346040518263ffffffff1660e060020a0281526004016000604051808303818588803b151561010257600080fd5b6125ee5a03f1151561011357600080fd5b505050505b5600a165627a7a723058207f9af51fad3fc3ff558b8bedca460deb456b00f8d317ad3ddc13d7c76c8cbf650029",
+  "networks": {
+    "12345": {
+      "events": {},
+      "links": {},
+      "address": "0xd2f717aa8e6c045d9a402ad2de04907810def291",
+      "updated_at": 1509693894572
+    }
+  },
+  "schema_version": "0.0.5",
+  "updated_at": 1509693894572
+}

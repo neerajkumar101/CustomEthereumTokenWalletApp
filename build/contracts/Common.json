@@ -1,0 +1,14 @@
+{
+  "contract_name": "Common",
+  "abi": [
+    {
+      "inputs": [],
+      "payable": false,
+      "type": "constructor"
+    }
+  ],
+  "unlinked_binary": "0x60606040523415600e57600080fd5b5b5b5b603680601e6000396000f30060606040525b600080fd00a165627a7a7230582023576c41797973defb31ae1b424286ac07c59c65f9fa297990748f524feb9d450029",
+  "networks": {},
+  "schema_version": "0.0.5",
+  "updated_at": 1511262969717
+}

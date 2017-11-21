@@ -1,0 +1,136 @@
+{
+  "contract_name": "TokenController",
+  "abi": [
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_token",
+          "type": "address"
+        }
+      ],
+      "name": "setToken",
+      "outputs": [],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "newSellPriceTokensPerEth",
+          "type": "uint256"
+        },
+        {
+          "name": "newBuyPriceTokensPerEth",
+          "type": "uint256"
+        }
+      ],
+      "name": "setPricesForTokensPerEth",
+      "outputs": [],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "sellPrice",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [],
+      "name": "acceptOwnership",
+      "outputs": [],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "buyPrice",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "owner",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "changeOwner",
+      "outputs": [],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [],
+      "name": "buyTokens",
+      "outputs": [],
+      "payable": true,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "amount",
+          "type": "uint256"
+        }
+      ],
+      "name": "sell",
+      "outputs": [],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "payable": false,
+      "type": "constructor"
+    },
+    {
+      "payable": true,
+      "type": "fallback"
+    }
+  ],
+  "unlinked_binary": "0x6060604052600060025560068054600160a060020a031916735ff51b742ecb1644fd284390b8a06668f82f11e9179055341561003a57600080fd5b5b60008054600160a060020a03191633600160a060020a03161790555b5b6104c5806100676000396000f3006060604052361561007d5763ffffffff60e060020a600035041663144fa6d781146100895780633d6fc810146100aa5780634b750334146100c557806379ba5097146100ea5780638620410b146100ff5780638da5cb5b14610124578063a6f9dae114610153578063d0febe4c1461007d578063e4849b321461017e575b5b610086610196565b5b005b341561009457600080fd5b610086600160a060020a0360043516610247565b005b34156100b557600080fd5b61008660043560243561028f565b005b34156100d057600080fd5b6100d86102ba565b60405190815260200160405180910390f35b34156100f557600080fd5b6100866102c0565b005b341561010a57600080fd5b6100d861030a565b60405190815260200160405180910390f35b341561012f57600080fd5b610137610310565b604051600160a060020a03909116815260200160405180910390f35b341561015e57600080fd5b610086600160a060020a036004351661031f565b005b610086610196565b005b341561018957600080fd5b610086600435610367565b005b60006101a134610444565b600354909150600160a060020a03166340c10f19338360405160e060020a63ffffffff8516028152600160a060020a0390921660048301526024820152604401600060405180830381600087803b15156101fa57600080fd5b6102c65a03f1151561020b57600080fd5b5050600654600160a060020a031690503480156108fc0290604051600060405180830381858888f19350505050151561024357600080fd5b5b50565b60005433600160a060020a0390811691161461026257600080fd5b6003805473ffffffffffffffffffffffffffffffffffffffff1916600160a060020a0383161790555b5b50565b60005433600160a060020a039081169116146102aa57600080fd5b600482905560058190555b5b5050565b60045481565b60015433600160a060020a0390811691161415610307576001546000805473ffffffffffffffffffffffffffffffffffffffff1916600160a060020a039092169190911790555b5b565b60055481565b600054600160a060020a031681565b60005433600160a060020a0390811691161461033a57600080fd5b6001805473ffffffffffffffffffffffffffffffffffffffff1916600160a060020a0383161790555b5b50565b6004548102600160a060020a03301631101561038257600080fd5b600354600160a060020a03166323b872dd33308460006040516020015260405160e060020a63ffffffff8616028152600160a060020a0393841660048201529190921660248201526044810191909152606401602060405180830381600087803b15156103ee57600080fd5b6102c65a03f115156103ff57600080fd5b50505060405180515050600454600160a060020a03331690820280156108fc0290604051600060405180830381858888f19350505050151561024357600080fd5b5b50565b600080808080670de0b6b3a7640000865b049250670de0b6b3a7640000865b069150662386f26fc10000825b049050606460055481151561048157fe5b04810260055484020193508394505b505050509190505600a165627a7a72305820c3f2dfdc76899cef1c2b7fd3267af00388653cfed42245816fa59f505ac87afa0029",
+  "networks": {
+    "1511245627016": {
+      "events": {},
+      "links": {},
+      "address": "0x82c396b12258878ce8f70f4fa834906c87738525",
+      "updated_at": 1511262970122
+    }
+  },
+  "schema_version": "0.0.5",
+  "updated_at": 1511262970122
+}
