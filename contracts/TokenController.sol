@@ -6,15 +6,15 @@ import './Token.sol';
 contract TokenController is SafeMath, Owned, Constants {
 
     Token token;
-    address private tokenContractCoinbase = 0x238c36e8d9839c8c377fc3f91bf7576125e653c7;
+    address private tokenContractCoinbase = 0x1ce3859b645d6bd10897c5faf93aa6c0c2e4ccdb;
 
-    function TokenController() {
+    function TokenController() public {
         owner = msg.sender;
     }
 
     function setToken(address _token)
     onlyOwner 
-    {
+    public {
         token = Token(_token);
     }
 
@@ -23,13 +23,14 @@ contract TokenController is SafeMath, Owned, Constants {
 
     function setPricesForTokensPerEth(uint256 newSellPriceTokensPerEth, uint256 newBuyPriceTokensPerEth) 
     onlyOwner 
-    public {
+    public 
+    {
         sellPrice = newSellPriceTokensPerEth;
         buyPrice = newBuyPriceTokensPerEth;
     }
 
 
-    function () payable {
+    function () payable public {
         /// this method should not be used from the coinbase to transfer coins
         if (msg.sender != tokenContractCoinbase) {
             buyTokens();       
