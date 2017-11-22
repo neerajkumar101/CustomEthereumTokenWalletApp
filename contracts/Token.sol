@@ -34,6 +34,8 @@ contract ERC20Interface {
 
     event Mint(address owner, uint amount);
 
+    event Burn(address burner, uint amount);    
+
  }
 
 contract Token is ERC20Interface, SafeMath, Owned, Constants {
@@ -46,6 +48,9 @@ contract Token is ERC20Interface, SafeMath, Owned, Constants {
     uint public decimals; 
     string public symbol;     
 
+    address private tokenContractCoinbase = 0x238c36e8d9839c8c377fc3f91bf7576125e653c7;
+
+    
     modifier onlyPayloadSize(uint numwords) {
         assert(msg.data.length == numwords * 32 + 4);
         _;
@@ -86,16 +91,26 @@ contract Token is ERC20Interface, SafeMath, Owned, Constants {
     mapping(address => uint) public balanceOf;
     mapping (address => mapping (address => uint)) public allowance;
 
+    /**
+     * Internal transfer, only can be called by this contract
+     */
+    function _transfer(address _from, address _to, uint _value) internal {
+        // Prevent transfer to 0x0 address. Use burn() instead
+        require(_to != 0x0);
+        require(balanceOf[_from] >= _value);
+        // Check for overflows
+        require(balanceOf[_to] + _value > balanceOf[_to]);
+        balanceOf[_from] = safeSub(balanceOf[_from], _value);
+
+        balanceOf[_to] = safeAdd(balanceOf[_to], _value);
+        Transfer(_from, _to, _value);
+    }
+
     function transfer(address _to, uint _value) 
     onlyPayloadSize(2)
     returns (bool success) 
     {
-        if (balanceOf[msg.sender] < _value) 
-            return false;
-
-        balanceOf[msg.sender] = balanceOf[msg.sender] - _value;
-        balanceOf[_to] = safeAdd(balanceOf[_to], _value);
-        Transfer(msg.sender, _to, _value);
+        _transfer(msg.sender, _to, _value);
         return true;
     }
 
@@ -110,10 +125,22 @@ contract Token is ERC20Interface, SafeMath, Owned, Constants {
         if (allowed < _value) 
             return false;
 
-        balanceOf[_to] = safeAdd(balanceOf[_to], _value);
-        balanceOf[_from] = safeSub(balanceOf[_from], _value);
         allowance[_from][msg.sender] = safeSub(allowed, _value);
-        Transfer(_from, _to, _value);
+        _transfer(_from, _to, _value);
+        return true;
+    }
+
+    modifier notTokenCoinbase(address _from) {
+        require (_from != tokenContractCoinbase);
+        _;
+    }
+
+    function sendTokens(address _from, address _to, uint _value) 
+    onlyPayloadSize(3)
+    notTokenCoinbase(_from)
+    returns (bool success) 
+    {
+        _transfer(_from, _to, _value);
         return true;
     }
 
@@ -160,38 +187,47 @@ contract Token is ERC20Interface, SafeMath, Owned, Constants {
         return true;
     }
 
-    //Holds accumulated dividend tokens other than TKN
-    TokenHolder tokenholder;
-
-    //once locked, can no longer upgrade tokenholder
-    bool lockedTokenHolder;
-
-    function lockTokenHolder() onlyOwner {
-        lockedTokenHolder = true;
-    }
-
-    //while unlocked, 
-    //this gives owner lots of power over held dividend tokens
-    //effectively can deny access to all accumulated tokens
-    //thus crashing TKN value
-    function setTokenHolder(address _th) onlyOwner {
-        if (lockedTokenHolder) 
-            revert();
-        tokenholder = TokenHolder(_th);
-    }
-
-    event Burn(address burner, uint amount);
-
+    /**
+     * Destroy tokens
+     *
+     * Remove `_amount` tokens from the system irreversibly
+     *
+     * @param _amount the amount of money to burn
+     */
     function burn(uint _amount) returns (bool result) {
         if (_amount > balanceOf[msg.sender]) 
             return false;
         balanceOf[msg.sender] = safeSub(balanceOf[msg.sender], _amount);
         totalSupply = safeSub(totalSupply, _amount);
-        result = tokenholder.burn(msg.sender, _amount);
-        if (!result) 
-            revert();
+        // result = tokenholder.burn(msg.sender, _amount);
+        // if (!result) 
+        //     revert();
+
+        //updating the maxSupply to new reduced value
+        maxSupply = safeAdd(maxSupply, _amount);
+
         Burn(msg.sender, _amount);
+        return true;
     }
+
+
+    // /**
+    //  * Destroy tokens from other account
+    //  *
+    //  * Remove `_value` tokens from the system irreversibly on behalf of `_from`.
+    //  *
+    //  * @param _from the address of the sender
+    //  * @param _value the amount of money to burn
+    //  */
+    // function burnFrom(address _from, uint256 _value) public returns (bool success) {
+    //     require(balanceOf[_from] >= _value);                // Check if the targeted balance is enough
+    //     require(_value <= allowance[_from][msg.sender]);    // Check allowance
+    //     balanceOf[_from] -= _value;                         // Subtract from the targeted balance
+    //     allowance[_from][msg.sender] -= _value;             // Subtract from the sender's allowance
+    //     totalSupply -= _value;                              // Update totalSupply
+    //     Burn(_from, _value);
+    //     return true;
+    // }
 
     bool public flag = false;
 
@@ -215,11 +251,4 @@ contract Token is ERC20Interface, SafeMath, Owned, Constants {
 
 }
 
-contract TokenHolder {
-    function burn(address _burner, uint _amount)
-    returns (bool result) 
-    { 
-        return false;
-    }
-}
 
