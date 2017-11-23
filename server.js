@@ -29,8 +29,6 @@ app.use(function(req, res, next) {
     next();
 });
 
-
-
 app.use(bodyParser.json())
     // app.use(express.static(__dirname + '../ngcourse-admin'))
 

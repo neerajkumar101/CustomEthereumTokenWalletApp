@@ -23,12 +23,10 @@ TokenController.deployed().then(function(deployed){deployed.sell.sendTransaction
 
 Token.deployed().then(function(deployed){deployed.sendTokens.sendTransaction(web3.eth.accounts[1], web3.eth.accounts[0], '106050').then(function(data){console.log(data)} ).catch(function(error){console.log('here is: ' + error)}) } );
 
-
 //requesting approval for sending tokens in transferFrom() in return of recieved ethers
 Token.deployed().then(function(deployed){deployed.approve(TokenController.address, '106050').then(function(data){console.log(data)} ) } )
 //test allowance
 Token.deployed().then(function(deployed){deployed.allowance.call(web3.eth.accounts[0], TokenController.address).then(function(hash){console.log(hash)} )} );
-
 
 //to send ether directly to the ICO contract : sending 60**18 i.e. 60 ethers
 Token.deployed().then(function(deployed){deployed.sendTransaction({ from: web3.eth.accounts[1], value: web3.fromWei('10000000000000000000', 'ether')}).then(function(data){console.log(data)} ) } );

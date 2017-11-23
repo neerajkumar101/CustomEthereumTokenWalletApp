@@ -6,7 +6,7 @@ import './Token.sol';
 contract TokenController is SafeMath, Owned, Constants {
 
     Token token;
-    address private tokenContractCoinbase = 0x1ce3859b645d6bd10897c5faf93aa6c0c2e4ccdb;
+    address private tokenContractCoinbase = 0x01de1c254be7a6b1829a8e41efb9d0f536306278;
 
     function TokenController() public {
         owner = msg.sender;

@@ -114,7 +114,8 @@ contract SafeMath {
     }
 
     function assert(bool assertion) internal {
-        if (!assertion) revert();
+        if (!assertion) 
+            revert();
     }
 }
 

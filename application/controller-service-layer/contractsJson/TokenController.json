@@ -1,0 +1,131 @@
+{
+  "contract_name": "TokenController",
+  "abi": [
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_token",
+          "type": "address"
+        }
+      ],
+      "name": "setToken",
+      "outputs": [],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "newSellPriceTokensPerEth",
+          "type": "uint256"
+        },
+        {
+          "name": "newBuyPriceTokensPerEth",
+          "type": "uint256"
+        }
+      ],
+      "name": "setPricesForTokensPerEth",
+      "outputs": [],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [],
+      "name": "sell",
+      "outputs": [],
+      "payable": true,
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "sellPrice",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [],
+      "name": "acceptOwnership",
+      "outputs": [],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "buyPrice",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "owner",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "_newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "changeOwner",
+      "outputs": [],
+      "payable": false,
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [],
+      "name": "buyTokens",
+      "outputs": [],
+      "payable": true,
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "payable": false,
+      "type": "constructor"
+    },
+    {
+      "payable": true,
+      "type": "fallback"
+    }
+  ],
+  "unlinked_binary": "0x6060604052600060025560048054600160a060020a031916731ce3859b645d6bd10897c5faf93aa6c0c2e4ccdb179055341561003a57600080fd5b5b60008054600160a060020a03191633600160a060020a03161790555b5b610505806100676000396000f3006060604052361561007d5763ffffffff60e060020a600035041663144fa6d781146100a05780633d6fc810146100c157806345710074146100dc5780634b750334146100e657806379ba50971461010b5780638620410b146101205780638da5cb5b14610145578063a6f9dae114610174578063d0febe4c14610195575b5b60045433600160a060020a0390811691161461009c5761009c61019f565b5b5b005b34156100ab57600080fd5b61009c600160a060020a0360043516610250565b005b34156100cc57600080fd5b61009c600435602435610298565b005b61009c6102c3565b005b34156100f157600080fd5b6100f9610395565b60405190815260200160405180910390f35b341561011657600080fd5b61009c61039b565b005b341561012b57600080fd5b6100f96103e5565b60405190815260200160405180910390f35b341561015057600080fd5b6101586103eb565b604051600160a060020a03909116815260200160405180910390f35b341561017f57600080fd5b61009c600160a060020a03600435166103fa565b005b61009c61019f565b005b60006101aa34610442565b600354909150600160a060020a03166340c10f19338360405160e060020a63ffffffff8516028152600160a060020a0390921660048301526024820152604401600060405180830381600087803b151561020357600080fd5b6102c65a03f1151561021457600080fd5b5050600454600160a060020a031690503480156108fc0290604051600060405180830381858888f19350505050151561024c57600080fd5b5b50565b60005433600160a060020a0390811691161461026b57600080fd5b6003805473ffffffffffffffffffffffffffffffffffffffff1916600160a060020a0383161790555b5b50565b60005433600160a060020a039081169116146102b357600080fd5b600582905560068190555b5b5050565b60006102ce34610496565b600354600454919250600160a060020a039081169163e6d66ac8913391163460006040516020015260405160e060020a63ffffffff8616028152600160a060020a0393841660048201529190921660248201526044810191909152606401602060405180830381600087803b151561034557600080fd5b6102c65a03f1151561035657600080fd5b50505060405180515050600160a060020a03331681156108fc0282604051600060405180830381858888f19350505050151561024c57600080fd5b5b50565b60055481565b60015433600160a060020a03908116911614156103e2576001546000805473ffffffffffffffffffffffffffffffffffffffff1916600160a060020a039092169190911790555b5b565b60065481565b600054600160a060020a031681565b60005433600160a060020a0390811691161461041557600080fd5b6001805473ffffffffffffffffffffffffffffffffffffffff1916600160a060020a0383161790555b5b50565b6000806000806000610453866104c3565b9250670de0b6b3a7640000865b069150662386f26fc10000825b049050606460065481151561047e57fe5b04810260065484020193508394505b50505050919050565b6000806000600554670de0b6b3a76400008115156104b057fe5b04915083820290508092505b5050919050565b6000670de0b6b3a7640000825b0490505b9190505600a165627a7a72305820292c962e309e586906f8f7deb23976a3c49e6aafe3ba9d6e4b2b8577792faefe0029",
+  "networks": {
+    "1": {
+      "events": {},
+      "links": {},
+      "address": "0xafab0086f1b3909c4468779a59ae5597d0e3cad8",
+      "updated_at": 1511352220267
+    }
+  },
+  "schema_version": "0.0.5",
+  "updated_at": 1511352220267
+}
