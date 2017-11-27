@@ -3,65 +3,70 @@ var fs = require('fs');
 var Web3 = require('web3');
 var web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:8545'));
 
-var Token = '0x3a92df72b8cc3f4350fa95b84b0b932cc2c40138';
-var TokenController = '0x5a4d91ef417c4c3c16ae340f9430767353bb544a';
+var Token = '0x804dd6f85a26789f55b77ee3efcb03d147371c0d';
+var TokenController = '0x91f0b811b2b677dabedf029acd0630e0adcc800e';
 
+var coinbase = '0x78edc8554640e597214b04e6fc6bcc6bf5647d83';
 userService = function(app) {
     this.app = app;
 };
 
 userService.prototype = new BaseService();
 
+userService.prototype.home = function(res, callback) {
+    res.send('NodeJS demo app by Neeraj Kumar Rajput.');
+    callback(null, null);
+}
+
 userService.prototype.setUpDeploy = function(res, callback) {
     async.auto({
         TokenSmartContractInstance: function(next) {
-            deployExistingSmartContract(next, Token, 'Token');
+            deployExistingSmartContract(next, Token, 'Token', function(error, result){
+                if(error != undefined){
+                    res.send(error);
+                } else {
+                    next(null, result);
+                }
+            });
         },
         TokenControllerSmartContractInstance: ['TokenSmartContractInstance', function(results, next) {
-            deployExistingSmartContract(next, TokenController, 'TokenController');
+            console.log('results: ' + results);
+            var promOb = deployExistingSmartContract(next, TokenController, 'TokenController', function(error, result){
+                if(error != undefined){
+                    res.send(error);
+                } else {
+                    next(null, result);                    
+                }
+            });
         }],
-        setToken: ['TokenControllerSmartContractInstance', function(results, next) {
-            setToken(next, results.TokenControllerSmartContractInstance, Token);
+        SetToken: ['TokenControllerSmartContractInstance', function(results, next) {
+            setToken(next, results.TokenControllerSmartContractInstance, Token, function(error, result){
+                if(error != undefined){
+                    res.send(error);
+                } else {
+                    next(null, result);                    
+                }
+            });
+        }],
+        SetMaxSupply: ['SetToken', function(results, next) {
+            setMaxSupply(next, results.TokenSmartContractInstance, '1000000000000000000000000000', function(error, result){
+                if(error != undefined){
+                    res.send(error);
+                } else {
+                    next(null, result);                    
+                }
+            });
+        }],
+        SetPricesForTokensPerEth: ['SetMaxSupply', function(results, next) {
+            setPricesForTokensPerEth(next, results.TokenControllerSmartContractInstance, '10000', '10100', function(error, result){
+                if(error != undefined){
+                    res.send(error);
+                } else {
+                    next(null, result);                    
+                }
+            });
         }]
-        // ICOControllerMonolithSmartContractInstance: function(next) {
-        //     deployExistingSmartContract(next, ICOControllerMonolith, 'ICOControllerMonolith');
-        // },
-        // ICOSmartContractInstance: ['ICOControllerMonolithSmartContractInstance', function(results, next) {
-        //     deployExistingSmartContract(next, ICO, 'ICO');
-        // }],
-        // TokenSmartContractInstance: ['ICOSmartContractInstance', function(results, next) {
-        //     deployExistingSmartContract(next, Token, 'Token');
-        // }],
-        // setICO: ['TokenSmartContractInstance', function(results, next) {
-        //     setICO(next, results.ICOControllerMonolithSmartContractInstance, ICO);
-        // }],
-        // setAsTest: ['TokenSmartContractInstance', function(results, next) {
-        //     setAsTest(next, results.ICOSmartContractInstance, ICO);
-        // }],
-        // setController: ['setAsTest', function(results, next) {
-        //     setController(next, results.ICOSmartContractInstance, ICOControllerMonolith);
-        // }],
-        // setICO1: ['setController', function(results, next) {
-        //     setICO(next, results.TokenSmartContractInstance, ICO);
-        // }],
-        // setController1: ['setICO1', function(results, next) {
-        //     setController(next, results.TokenSmartContractInstance, ICOControllerMonolith);
-        // }],
-        // setToken: ['setController1', function(results, next) {
-        //     setToken(next, results.ICOSmartContractInstance, Token);
-        // }],
-        // setFirstSaleLauncher: ['setToken', function(results, next) {
-        //     setFirstSaleLauncher(next, results.ICOControllerMonolithSmartContractInstance, FirstSaleLauncher);
-        // }],
-        // setAuctionLauncher: ['setFirstSaleLauncher', function(results, next) {
-        //     setAuctionLauncher(next, results.ICOControllerMonolithSmartContractInstance, AuctionLauncher);
-        // }],
-        // setAdvisor: ['setAuctionLauncher', function(results, next) {
-        //     setAdvisor(next, results.ICOControllerMonolithSmartContractInstance, Advisor);
-        // }],
-        // setFakeTime: ['setAdvisor', function(results, next) {
-        //     setFakeTime(next, results.ICOSmartContractInstance);
-        // }]
+
     }, function(err, success) {
         console.log("success", success)
         if (err) {
@@ -73,31 +78,10 @@ userService.prototype.setUpDeploy = function(res, callback) {
         }
     });
 }
-
-userService.prototype.getSalesCount = function(res, callback) {
-//  async.auto({
-//      ICOSmartContractInstance: function(next) {
-//          deployExistingSmartContract(next, ICOControllerMonolith, 'ICOControllerMonolith');
-//      },
-//      SalesCount: ['ICOSmartContractInstance', function(results, next) {
-//          var deployed = results.ICOSmartContractInstance;
-//          var transfer = deployed.numSales.call();
-//          console.log(transfer)
-//          next(null, transfer)
-//      }],
-//  }, function(err, success) {
-//      console.log(success, "success")
-//      if (err) {
-//          console.log("error")
-//          callback(err, null);
-//      } else {
-//          console.log("success")
-//          callback(null, success);
-//      }
-//  });
-callback(null,null);
+userService.prototype.getTokenBalance = function(req, res, callback) {
+    console.log(req.body.address);
+    
 }
-
 userService.prototype.startFirstICOSale = function(res, callback) {
     // ICOControllerMonolith.deployed().then(function(deployed) { deployed.startFirstSale.sendTransaction(100).then(function(hash) { console.log(hash) }) });
     async.auto({
@@ -124,24 +108,39 @@ userService.prototype.startFirstICOSale = function(res, callback) {
     });
 }
 
-function setToken(next, deployed, Token) {
+function setToken(next, deployed, Token, callback) {
     var hash = deployed.setToken.getData(Token);
     var transfer = deployed._eth.sendTransaction({ from: coinbase, to: deployed.address, data: hash })
-    var setToken = {
+    var transactionHash = {
         getData: hash,
         sendTransaction: transfer
     }
-    next(null, setToken)
+    callback(null, transactionHash);
 }
 
-function setMaxSupply(next, deployed, maxSupply) {
-    var hash = deployed.setICO.getData(maxSupply);
+function setMaxSupply(next, deployed, maxSupply, callback) {
+    var hash = deployed.setMaxSupply.getData(maxSupply);
     var transfer = deployed._eth.sendTransaction({ from: coinbase, to: deployed.address, data: hash })
-    var setICO = {
+    var transactionHash = {
         getData: hash,
         sendTransaction: transfer
     }
-    next(null, setICO)
+    callback(null, transactionHash);
+}
+
+function setPricesForTokensPerEth(next, deployed, sellPrice, buyPrice, callback){
+    var hash = deployed.setPricesForTokensPerEth.getData(sellPrice, buyPrice);
+    var transfer = deployed._eth.sendTransaction({ from: coinbase, to: deployed.address, data: hash })
+    var transactionHash = {
+        getData: hash,
+        sendTransaction: transfer
+    }
+    callback(null, transactionHash);
+}
+
+function getTokenBalance(next, deployed, accountAddress, callback) {
+    var tokenBal = deployed.getTokenBalance(accountAddress);
+    callback(null, tokenBal); 
 }
 
 function setAsTest(next, deployed, icoAddress) {
@@ -213,7 +212,6 @@ function sendTransaction(next, from, to, smartContractAddress, contractInstance)
     });
 }
 
-
 function setFakeTime(next, deployed) {
     var transfer = deployed.setFakeTime.call('1');
     var setFakeTime = {
@@ -245,7 +243,7 @@ var unlockAccount = function(owner, password) {
     });
 }
 
-var deployExistingSmartContract = (next, smartContractAddress, contractName) => {
+var deployExistingSmartContract = (next, smartContractAddress, contractName, callback) => {
     var promOb = new Promise((resolve, reject) => {
         // fs.readFile(__dirname + '/../contractsJson/' + contractName + '.json', 'utf8', function(error, abiRetrieved) {
         fs.readFile(__dirname + '/../../../build/contracts/' + contractName + '.json', 'utf8', function(error, abiRetrieved) {            
@@ -275,16 +273,12 @@ var deployExistingSmartContract = (next, smartContractAddress, contractName) => 
                 console.log(contractInstance);
                 console.log('===============================================================');
                 
-                
-                resolve(null, contractInstance);
+                resolve(null, contractInstance); // useful only when someone handles the promise itself
+                callback(null, contractInstance); // we are only handling through callbacks
             }
         });
     });
-    promOb.then(function(contractInstance){
-        next(null, contractInstance);
-    }).catch(function(error){
-        console.log('error occured: ' + error);
-    });
+    return promOb;
 }
 
 module.exports = function(app) {

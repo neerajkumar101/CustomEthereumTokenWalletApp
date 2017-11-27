@@ -1,6 +1,15 @@
 module.exports = function() {
+
+    var home = function(req, res, callback) {
+        this.services.userService.home(res, callback);
+    }
+
     var setUpDeploy = function(req, res, callback) {
         this.services.userService.setUpDeploy(res, callback);
+    }
+
+    var getTokenBalance = function(req, res, callback) {
+        this.services.userService.getTokenBalance(req, res, callback);
     }
 
     var setUpDeploy1 = function(req, res, callback) {
@@ -17,7 +26,9 @@ module.exports = function() {
     }
 
     return {
+        home: home,
         setUpDeploy: setUpDeploy,
+        getTokenBalance: getTokenBalance,
         setUpDeploy1: setUpDeploy1,
         startFirstICOSale: startFirstICOSale,
         getSalesCount: getSalesCount
