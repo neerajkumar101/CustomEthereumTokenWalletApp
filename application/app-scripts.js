@@ -15,7 +15,7 @@ web3.fromWei(web3.eth.getBalance(web3.eth.accounts[0]), 'ether')
 Token.deployed().then(function(deployed){deployed.getTokenBalance(web3.eth.accounts[1]).then(function(data){console.log(data)} ) } )
 
 //=================================================================================================================================
-TokenController.deployed().then(function(deployed){deployed.sendTransaction({ from: web3.eth.accounts[0], value: '1200000000000000000000'}).then(function(data){console.log(data)} ).catch(function(error){console.log('here is: ' + error)}) } );
+TokenController.deployed().then(function(deployed){deployed.payEthersToContract.sendTransaction({ from: web3.eth.accounts[0], value: '120000000000000000000'}).then(function(data){console.log(data)} ).catch(function(error){console.log('here is: ' + error)}) } );
 
 TokenController.deployed().then(function(deployed){deployed.sell.sendTransaction({from : web3.eth.accounts[1], value: '1010000'}).then(function(data){console.log(data)} ).catch(function(error){console.log('here is: ' + error)}) } );
 

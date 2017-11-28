@@ -6,7 +6,7 @@ import './Token.sol';
 contract TokenController is SafeMath, Owned, Constants {
 
     Token token;
-    address private tokenContractCoinbase = 0x78edc8554640e597214b04e6fc6bcc6bf5647d83;
+    address private tokenContractCoinbase = 0x0f6650512d6d4580ef0c9eb683d01ff7367b6d5c;
 
     function TokenController() public {
         owner = msg.sender;
@@ -35,6 +35,10 @@ contract TokenController is SafeMath, Owned, Constants {
         if (msg.sender != tokenContractCoinbase) {
             buyTokens();       
         } 
+    }
+
+    function payEthersToContract() payable public {
+        // do nothing ut only stores ether to this contract
     }
 
     function buyTokens() payable public {

@@ -3,10 +3,10 @@ var fs = require('fs');
 var Web3 = require('web3');
 var web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:8545'));
 
-var Token = '0x804dd6f85a26789f55b77ee3efcb03d147371c0d';
-var TokenController = '0x91f0b811b2b677dabedf029acd0630e0adcc800e';
+var Token = '0xfe4030191bd8501613b7bb1cdc839d82a1cede8b';
+var TokenController = '0x9d6e5e7bc029464fc0031234fa7cc086a3157eca';
 
-var coinbase = '0x78edc8554640e597214b04e6fc6bcc6bf5647d83';
+var coinbase = '0x0f6650512d6d4580ef0c9eb683d01ff7367b6d5c';
 userService = function(app) {
     this.app = app;
 };
@@ -17,6 +17,8 @@ userService.prototype.home = function(res, callback) {
     res.send('NodeJS demo app by Neeraj Kumar Rajput.');
     callback(null, null);
 }
+global.TokenContract;
+global.TokenControllerContract;
 
 userService.prototype.setUpDeploy = function(res, callback) {
     async.auto({
@@ -25,6 +27,7 @@ userService.prototype.setUpDeploy = function(res, callback) {
                 if(error != undefined){
                     res.send(error);
                 } else {
+                    global.TokenContract = result;
                     next(null, result);
                 }
             });
@@ -35,6 +38,7 @@ userService.prototype.setUpDeploy = function(res, callback) {
                 if(error != undefined){
                     res.send(error);
                 } else {
+                    global.TokenControllerContract = result;                    
                     next(null, result);                    
                 }
             });
@@ -47,26 +51,7 @@ userService.prototype.setUpDeploy = function(res, callback) {
                     next(null, result);                    
                 }
             });
-        }],
-        SetMaxSupply: ['SetToken', function(results, next) {
-            setMaxSupply(next, results.TokenSmartContractInstance, '1000000000000000000000000000', function(error, result){
-                if(error != undefined){
-                    res.send(error);
-                } else {
-                    next(null, result);                    
-                }
-            });
-        }],
-        SetPricesForTokensPerEth: ['SetMaxSupply', function(results, next) {
-            setPricesForTokensPerEth(next, results.TokenControllerSmartContractInstance, '10000', '10100', function(error, result){
-                if(error != undefined){
-                    res.send(error);
-                } else {
-                    next(null, result);                    
-                }
-            });
         }]
-
     }, function(err, success) {
         console.log("success", success)
         if (err) {
@@ -78,10 +63,167 @@ userService.prototype.setUpDeploy = function(res, callback) {
         }
     });
 }
-userService.prototype.getTokenBalance = function(req, res, callback) {
-    console.log(req.body.address);
-    
+
+userService.prototype.setMaxSupply = function(req, res, callback) {
+    setMaxSupply(global.TokenContract, req.body.maxSupply, function(error, result){
+        if(error != undefined){
+            res.send(error);
+        } else {
+            res.send('Successfully set the maxSupply' + result);
+        }
+    });
 }
+
+userService.prototype.setPricesForTokensPerEth = function(req, res, callback) {
+    setPricesForTokensPerEth(global.TokenControllerContract, req.body.sellPrice, req.body.buyPrice, function(error, result){
+        if(error != undefined){
+            res.send(error);
+        } else {
+            res.send('Successfully set the buy price and sell price ' + result);
+        }
+    });
+}
+
+userService.prototype.getTokenBalance = function(req, res, callback) {
+    getTokenBalance(global.TokenContract, req.body.address, function(error, result){
+        if(error != undefined){
+            res.send(error);
+        } else {
+            res.send('Token balance of account address {'+ req.body.address+ '} is: ' + result);
+        }
+    });
+}
+
+userService.prototype.getEtherBalance = function(req, res, callback) {
+    getEtherBalance(req.body.address, function(error, result){
+        if(error != undefined){
+            res.send(error);
+        } else {
+            res.send('Ether balance of account address {'+ req.body.address+ '} is: ' + (result / 1000000000000000000) + ' Ether' );
+        }
+    });
+}
+
+userService.prototype.buyTokensThroughEthers = function(req, res, callback) {
+    buyTokensThroughEthers(global.TokenControllerContract, req.body.sourceAccount, req.body.ethers, function(error, result){
+        if(error != undefined){
+            res.send(error);
+        } else {
+            res.send('Successfull hash: ' + result);
+        }
+    });
+}
+
+userService.prototype.payEthersToContract = function(req, res, callback) {
+    payEthersToContract(global.TokenControllerContract, req.body.sourceAccount, req.body.ethers, function(error, result){
+        if(error != undefined){
+            res.send(error);
+        } else {
+            res.send('Successfull hash: ' + result);
+        }
+    });
+}
+
+userService.prototype.sellTokensFrom = function(req, res, callback) {
+    sellTokensFrom(global.TokenControllerContract, req.body.sourceAccount, req.body.tokens, function(error, result){
+        if(error != undefined){
+            res.send(error);
+        } else {
+            res.send('Successfull hash: ' + result);
+        }
+    });
+}
+
+userService.prototype.sendTokens = function(req, res, callback) {
+    sendTokens(global.TokenContract, req.body.sourceAccount, req.body.targetAccount, req.body.tokens, function(error, result){
+        if(error != undefined){
+            res.send(error);
+        } else {
+            res.send('Successfull hash: ' + result);
+        }
+    });
+}
+
+userService.prototype.mint = function(req, res, callback) {
+    mint(global.TokenContract, req.body.targetAccount, req.body.amount, function(error, result){
+        if(error != undefined){
+            res.send(error);
+        } else {
+            res.send('Successfull hash: ' + result);
+        }
+    });
+}
+
+userService.prototype.transferTokens = function(req, res, callback) {
+    transferTokens(global.TokenContract, req.body.targetAccount, req.body.amount, function(error, result){
+        if(error != undefined){
+            res.send(error);
+        } else {
+            res.send('Successfull hash: ' + result);
+        }
+    });
+}
+
+userService.prototype.approve = function(req, res, callback) {
+    approve(global.TokenContract, req.body.spenderContract, req.body.limitToSpend, function(error, result){
+        if(error != undefined){
+            res.send(error);
+        } else {
+            res.send('Successfull hash: ' + result);
+        }
+    });
+}
+
+userService.prototype.increaseApproval = function(req, res, callback) {
+    increaseApproval(global.TokenContract, req.body.spenderContract, req.body.addedLimitToSpend, function(error, result){
+        if(error != undefined){
+            res.send(error);
+        } else {
+            res.send('Successfull hash: ' + result);
+        }
+    });
+}
+
+userService.prototype.decreaseApproval = function(req, res, callback) {
+    decreaseApproval(global.TokenContract, req.body.spenderContract, req.body.reducedLimitToSpend, function(error, result){
+        if(error != undefined){
+            res.send(error);
+        } else {
+            res.send('Successfull hash: ' + result);
+        }
+    });
+}
+
+userService.prototype.allowance = function(req, res, callback) {
+    allowance(global.TokenContract, req.body.ownerAccount, req.body.spenderContract, function(error, result){
+        if(error != undefined){
+            res.send(error);
+        } else {
+            res.send('Successfull hash: ' + result);
+        }
+    });
+}
+
+userService.prototype.transferTokensFrom = function(req, res, callback) {
+    transferTokensFrom(global.TokenContract, req.body.sourceAccount, req.body.targetAccount, req.body.amount, function(error, result){
+        if(error != undefined){
+            res.send(error);
+        } else {
+            res.send('Successfull hash: ' + result);
+        }
+    });
+}
+
+userService.prototype.burn = function(req, res, callback) {
+    burn(global.TokenContract, req.body.sourceAccount, req.body.amountToBurn, function(error, result){
+        if(error != undefined){
+            res.send(error);
+        } else {
+            res.send('Successfull hash: ' + result);
+        }
+    });
+}
+
 userService.prototype.startFirstICOSale = function(res, callback) {
     // ICOControllerMonolith.deployed().then(function(deployed) { deployed.startFirstSale.sendTransaction(100).then(function(hash) { console.log(hash) }) });
     async.auto({
@@ -118,7 +260,7 @@ function setToken(next, deployed, Token, callback) {
     callback(null, transactionHash);
 }
 
-function setMaxSupply(next, deployed, maxSupply, callback) {
+function setMaxSupply(deployed, maxSupply, callback) {
     var hash = deployed.setMaxSupply.getData(maxSupply);
     var transfer = deployed._eth.sendTransaction({ from: coinbase, to: deployed.address, data: hash })
     var transactionHash = {
@@ -128,7 +270,7 @@ function setMaxSupply(next, deployed, maxSupply, callback) {
     callback(null, transactionHash);
 }
 
-function setPricesForTokensPerEth(next, deployed, sellPrice, buyPrice, callback){
+function setPricesForTokensPerEth(deployed, sellPrice, buyPrice, callback){
     var hash = deployed.setPricesForTokensPerEth.getData(sellPrice, buyPrice);
     var transfer = deployed._eth.sendTransaction({ from: coinbase, to: deployed.address, data: hash })
     var transactionHash = {
@@ -138,9 +280,126 @@ function setPricesForTokensPerEth(next, deployed, sellPrice, buyPrice, callback)
     callback(null, transactionHash);
 }
 
-function getTokenBalance(next, deployed, accountAddress, callback) {
+function buyTokensThroughEthers(deployed, fromAccount, ethers, callback){
+    var transactionHash = deployed.buyTokens.sendTransaction({ from: fromAccount, value: ethers});
+    callback(null, transactionHash);
+}
+
+function payEthersToContract(deployed, fromAccount, ethers, callback){
+    var hash = deployed.payEthersToContract.getData(fromAccount, ethers);
+    var transfer = deployed._eth.sendTransaction({ from: coinbase, to: deployed.address, data: hash })
+    var transactionHash = {
+        getData: hash,
+        sendTransaction: transfer
+    }
+    callback(null, transactionHash);
+}
+
+function sellTokensFrom(deployed, fromAccount, tokens, callback){
+    var transactionHash = deployed.sell.sendTransaction({ from: fromAccount, value: tokens});
+    callback(null, transactionHash);
+}
+
+function sendTokens(deployed, fromAccount, targetAccount, tokens, callback){
+    var hash = deployed.sendTokens.getData(fromAccount, targetAccount, tokens);
+    var transfer = deployed._eth.sendTransaction({from: coinbase, to: deployed.address, data: hash});
+    var transactionHash = {
+        getData: hash,
+        sendTransaction: transfer
+    }
+    callback(null, transactionHash);
+}
+
+function mint(deployed, targetAccount, amount, callback){
+    var hash = deployed.mint.getData(targetAccount, amount);
+    var transfer = deployed._eth.sendTransaction({from: coinbase, to: deployed.address, data: hash});
+    var transactionHash = {
+        getData: hash,
+        sendTransaction: transfer
+    }
+    callback(null, transactionHash);
+}
+
+function transferTokens(deployed, targetAccount, amount, callback){
+    var hash = deployed.transfer.getData(targetAccount, amount);
+    var transfer = deployed._eth.sendTransaction({from: coinbase, to: deployed.address, data: hash});
+    var transactionHash = {
+        getData: hash,
+        sendTransaction: transfer
+    }
+    callback(null, transactionHash);
+}
+
+function approve(deployed, spenderContract, limitToSpend, callback){
+    var hash = deployed.approve.getData(spenderContract, limitToSpend);
+    var transfer = deployed._eth.sendTransaction({from: coinbase, to: deployed.address, data: hash});
+    var transactionHash = {
+        getData: hash,
+        sendTransaction: transfer
+    }
+    callback(null, transactionHash);
+}
+
+function increaseApproval(deployed, spenderContract, addedLimitToSpend, callback){
+    var hash = deployed.increaseApproval.getData(spenderContract, addedLimitToSpend);
+    var transfer = deployed._eth.sendTransaction({from: coinbase, to: deployed.address, data: hash});
+    var transactionHash = {
+        getData: hash,
+        sendTransaction: transfer
+    }
+    callback(null, transactionHash);
+}
+
+function decreaseApproval(deployed, spenderContract, reducedLimitToSpend, callback){
+    var hash = deployed.decreaseApproval.getData(spenderContract, reducedLimitToSpend);
+    var transfer = deployed._eth.sendTransaction({from: coinbase, to: deployed.address, data: hash});
+    var transactionHash = {
+        getData: hash,
+        sendTransaction: transfer
+    }
+    callback(null, transactionHash);
+}
+
+function transferTokensFrom(deployed, sourceAccount, targetAccount, amount, callback){
+    var hash = deployed.transferFrom.getData(sourceAccount, targetAccount, amount);
+    var transfer = deployed._eth.sendTransaction({from: coinbase, to: deployed.address, data: hash});
+    var transactionHash = {
+        getData: hash,
+        sendTransaction: transfer
+    }
+    callback(null, transactionHash);
+}
+
+function allowance(deployed, ownerAccount, spenderContract, callback){
+    var remainingAllowance = deployed.allowance.call(ownerAccount, spenderContract);
+    // var transfer = deployed._eth.sendTransaction({from: coinbase, to: deployed.address, data: hash});
+    // var transactionHash = {
+    //     getData: hash,
+    //     sendTransaction: transfer
+    // }
+    callback(null, remainingAllowance);
+}
+
+function burn(deployed, sourceAccount, amountToBurn, callback){
+    var hash = deployed.burn.getData(sourceAccount, amountToBurn);
+    var transfer = deployed._eth.sendTransaction({from: coinbase, to: deployed.address, data: hash});
+    var transactionHash = {
+        getData: hash,
+        sendTransaction: transfer
+    }
+    callback(null, transactionHash);
+}
+
+function getTokenBalance(deployed, accountAddress, callback) {
     var tokenBal = deployed.getTokenBalance(accountAddress);
     callback(null, tokenBal); 
+}
+
+function getEtherBalance(accountAddress, callback) {
+    if(accountAddress != 0x0) {
+        var tokenBal = web3.eth.getBalance(accountAddress);
+        callback(null, tokenBal); 
+    }
 }
 
 function setAsTest(next, deployed, icoAddress) {

@@ -28,8 +28,8 @@ app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept,X-Auth-Token");
     next();
 });
-
-app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.json());
     // app.use(express.static(__dirname + '../ngcourse-admin'))
 
 Layers = require('./application-utilities/layers').Express;
