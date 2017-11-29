@@ -6,7 +6,7 @@ import './Token.sol';
 contract TokenController is SafeMath, Owned, Constants {
 
     Token token;
-    address private tokenContractCoinbase = 0x0f6650512d6d4580ef0c9eb683d01ff7367b6d5c;
+    address private tokenContractCoinbase = 0x0270a33e6ac28b8c1d444bb5eab3ad1d453e4d5f;
 
     function TokenController() public {
         owner = msg.sender;
@@ -81,5 +81,12 @@ contract TokenController is SafeMath, Owned, Constants {
         uint weis = calculateWeisForTokensToSell(msg.value);
         token.sendTokens(msg.sender, tokenContractCoinbase, msg.value);        
         msg.sender.transfer(weis); 
+    }
+
+    function transferFrom(address _from, address _to, uint _value)
+    public returns (bool success) 
+    {
+        bool flag = token.transferFrom(_from, _to, _value);
+        return flag;
     }
 }

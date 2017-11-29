@@ -25,7 +25,7 @@ contract Token is ERC20Interface, SafeMath, Owned, Constants {
     string public symbol;     
 
     //must set the address of the coinbase of contracts and benificiary account as both are same here
-    address private tokenContractCoinbase = 0x0f6650512d6d4580ef0c9eb683d01ff7367b6d5c;
+    address private tokenContractCoinbase = 0x0270a33e6ac28b8c1d444bb5eab3ad1d453e4d5f;
     
 
     function Token() public {     
